@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ranger
+  namespace: ranger-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: ranger
+  template:
+    spec:
+      containers:
+        - image: channwl/ranger:ranger-root-3.0.0-snapshot-trino
+          entrypoint: /root/docker-entrypoint.sh
+          imagePullPolicy: Always
+          name: ranger
+          ports:
+            - name: 'port'
+              containerPort: 6080
+              protocol: TCP
+          volumeMounts:
+              - name: install-config
+                subPath: install.properties
+                mountPath: /opt/ranger/admin/install.properties
+              - name: entrypoint-config
+                subPath: docker-entrypoint.sh
+                mountPath: /root/docker-entrypoint.sh
+          stdin: true
+          tty: true
+      hostname: ranger-test
+      restartPolicy: Always
+      securityContext:
+        runAsUser: 0
+      serviceAccountName: "ranger-root"
+      volumes:
+        - name: install-config
+          configMap:
+            name: install-config
+        - name: entrypoint-config
+          configMap:
+            name: entrypoint-config

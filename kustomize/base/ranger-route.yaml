@@ -1,0 +1,11 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: ranger-test
+spec:
+  host: ranger-test-ranger-test.apps.klhymc1rs8d4802948.westeurope.aroapp.io
+  port:
+    targetPort: default
+  to:
+    kind: Service
+    name: ranger

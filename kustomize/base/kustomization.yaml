@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: ranger-test
+resources:
+- ranger-deployment.yaml
+# - ranger-solr-deployment.yaml
+# - ranger-zk-deployment.yaml
+- ranger-service.yaml
+# - ranger-solr-service.yaml
+# - ranger-zk-service.yaml
+- ranger-route.yaml
+- configmap.yaml
+- docker-entrypoint.yaml
+configMapgenerator:
+  - name: ranger-env
+    literals:
+      - DB_FLAVOR=postgres
+      - SQL_CONNECTOR_JAR=/usr/share/java/postgresql.jar
+      - db_root_user=ranger
+      - db_root_password=rangerR0cks!
+      - db_host=51.136.86.220:5432
+      - RANGER_VERSION=3.0.0-SNAPSHOT
+      - RANGER_DB_TYPE=postgres
+      - DEBUG_ADMIN=${DEBUG_ADMIN:-false}

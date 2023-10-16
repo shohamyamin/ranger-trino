@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: entrypoint-config
+data:
+  install.properties: |-
+    #!/bin/bash
+
+    RANGER_VERSION=3.0.0-SNAPSHOT
+
+    echo "i am"
+    whoami
+    tar xvf ranger-${RANGER_VERSION}-admin.tar.gz
+    cd /root/ranger-${RANGER_VERSION}-admin/
+    cp /root/install.properties /opt/ranger-${RANGER_VERSION}-admin/ 
+    cp /root/install.properties /opt/ranger/admin/
+    ./setup.sh
+    ranger-admin start
+    tail -f /root/ranger-${RANGER_VERSION}-admin/ews/logs/ranger-admin-*-.log
